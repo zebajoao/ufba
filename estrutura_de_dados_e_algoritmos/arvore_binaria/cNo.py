@@ -26,9 +26,9 @@ class No:
     def getRightChild(self):
         return self.right
     
-    def setRIghtChild(self, node):
+    def setRightChild(self, node):
         self.right = node
         
     def show(self):
-        return f"{self.getKey}"
+        return f"{self.getKey()}"
     
