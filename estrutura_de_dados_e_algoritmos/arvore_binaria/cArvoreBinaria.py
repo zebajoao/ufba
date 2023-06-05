@@ -10,5 +10,17 @@ class ArvoreBinaria:
     def setRoot(self, node):
         self.root = node
         
+    def displayInOrder(self, root):
+        if root == None:
+            return
+        self.displayInOrder(root.getLeftChild)
+        print(root.show)
+        self.displayInOrder(root.getRightChild)
+        
+    def empty(self):
+        if self.getRoot == None:
+            return 1
+        return 0
+    
     
     
