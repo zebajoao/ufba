@@ -22,5 +22,26 @@ class ArvoreBinaria:
             return 1
         return 0
     
+    def insert(self, key):
+        element = No(key)
+        if self.empty:
+            self.setRoot(element)
+        else:
+            temp = self.getRoot
+            while True:
+                if element.getKey <= temp.getKey:
+                    if temp.getLeftChild == None:
+                        element.setFather(temp)
+                        temp.setLeftChild(element)
+                        break
+                    temp = temp.getLeftChild
+                    continue
+                else:
+                    if temp.getRightChild == None:
+                        element.setFather(temp)
+                        temp.setRightChild(element)
+                        break
+                    temp = temp.getRightChild
+                    continue
     
     
