@@ -44,4 +44,18 @@ class ArvoreBinaria:
                     temp = temp.getRightChild
                     continue
     
+    def searchInOrder(self, key, root):
+        if root == None:
+            return
+        self.searchInOrder(key, root.getLeftChild)
+        if root.getKey == key:
+            return root
+        self.searchInOrder(key, root.getRightChild)
+        
+    def whichChild(self, node, father, setter):
+        if node.getKey <= father.getKey:
+            father.setLeftChild(setter)
+        else:
+            father.setRightChild(setter)
+            
     
