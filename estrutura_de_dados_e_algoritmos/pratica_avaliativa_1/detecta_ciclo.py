@@ -19,7 +19,6 @@ class No:
         return f"{self.getChave()}"
     
 class ListaEncadeadaSimples:
-
     def __init__(self):
         self.head = None
 
@@ -38,6 +37,16 @@ class ListaEncadeadaSimples:
             while temp.getProx() != None:
                 temp = temp.getProx()
             temp.setProx(no)
+            
+    def detectsCycle(self):
+        temp1 = self.getHead()
+        temp2 = temp1.getProx()
+        while temp2 != None:
+            if temp1 == temp2:
+                return "Ciclo"
+            temp1 = temp1.getProx()
+            temp2 = temp2.getProx().getProx()
+        return "Sem Ciclo"
         
     def search(self, chave):
         temp = self.getHead()
@@ -58,6 +67,7 @@ def main():
         elemento = lista.search(no[0])
         proximo = lista.search(no[1])
         elemento.setProx(proximo)
+    print(lista.detectsCycle())
             
 if __name__ == "__main__":
     main()
