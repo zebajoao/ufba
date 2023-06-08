@@ -35,13 +35,29 @@ class ListaEncadeadaSimples:
             self.setHead(no)
         else:
             temp = self.getHead()
-            while temp.prox != None:
-                temp = temp.prox
-            temp.prox = no
+            while temp.getProx() != None:
+                temp = temp.getProx()
+            temp.setProx(no)
         
     def search(self, chave):
         temp = self.getHead()
         while temp != None:
-            if temp.valor == chave:
+            if temp.getChave() == chave:
                 return temp
-            temp = temp.prox 
+            temp = temp.getProx() 
+
+def main():
+    lista = ListaEncadeadaSimples()
+    qtdLinhas = int(input())
+    for i in range(qtdLinhas):
+        if i == 0:
+            chaves = input().split()
+            for item in chaves:
+                lista.append(item)
+        no = input().split()
+        elemento = lista.search(no[0])
+        proximo = lista.search(no[1])
+        elemento.setProx(proximo)
+            
+if __name__ == "__main__":
+    main()
