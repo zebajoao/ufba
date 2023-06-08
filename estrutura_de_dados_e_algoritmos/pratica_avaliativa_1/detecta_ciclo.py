@@ -1,5 +1,5 @@
 class No:
-    def __init__(self, chave, prox):
+    def __init__(self, chave=None, prox=None):
         self.chave = chave
         self.prox = prox
     
