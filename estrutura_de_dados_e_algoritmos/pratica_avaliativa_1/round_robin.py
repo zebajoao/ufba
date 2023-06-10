@@ -70,6 +70,8 @@ class Fila:
             temp = self.getFirst()
             self.setFirst(temp.getProx())
             temp.setProx(None)
+            if self.getFirst() == None:
+                self.setLast(None)
     
 def main():
     filaIDs = Fila()
