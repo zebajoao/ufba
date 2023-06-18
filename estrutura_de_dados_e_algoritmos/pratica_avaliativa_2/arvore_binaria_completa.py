@@ -63,8 +63,8 @@ class ArvoreBinaria:
     def setRaiz(self, no):
         self.raiz = no
     
-    def add(self, elemento):
-        no = No(elemento)
+    def add(self, chave):
+        no = No(chave)
         if self.empty():
             self.setRaiz(no)
         else:
@@ -93,6 +93,17 @@ class ArvoreBinaria:
     def newTree():    
         return ArvoreBinaria()
     
+    def search(self, chave, raiz):
+        if raiz == None:
+            return
+        if raiz.getChave() == chave:
+            return raiz
+        temp = self.search(chave, raiz.getEsq())
+        if temp != None:
+            return temp
+        else:
+            return self.search(chave, raiz.getDir())
+    
     def selectRoot(self, raiz):
         nivelCompleto = self.verifyLevel(raiz)
         if nivelCompleto == False:
@@ -100,9 +111,9 @@ class ArvoreBinaria:
         elif (raiz.getEsq() == None or raiz.getDir() == None):
             return raiz
         else:
-            raiz = self.selectRoot(raiz.getEsq())
-            if raiz != None:
-                return raiz
+            temp = self.selectRoot(raiz.getEsq())
+            if temp != None:
+                return temp
             else:
                 return self.selectRoot(raiz.getDir())
     
@@ -113,15 +124,24 @@ class ArvoreBinaria:
             return False
             
 def main():
-    print("Iniciando teste")
+    print("Iniciando teste\n")
     arvore = ArvoreBinaria.newTree()
     arvore.add(1)
     arvore.add(2)
     arvore.add(3)
     arvore.add(4)
     arvore.add(5)
+    arvore.add(6)
+    arvore.add(7)
+    arvore.add(8)
+    arvore.add(9)
+    arvore.add(10)
     arvore.display(arvore.getRaiz())
-    print(f"\nProfundidade: {arvore.getProfundidade()}.")
+    print(f"\nProfundidade: {arvore.getProfundidade()}.\n")
+    no1 = arvore.search(3, arvore.getRaiz())
+    no2 = arvore.search(10, arvore.getRaiz())
+    print(no1.getNivel() - no2.getNivel())
+    
     
 if __name__ == "__main__":
     main()
