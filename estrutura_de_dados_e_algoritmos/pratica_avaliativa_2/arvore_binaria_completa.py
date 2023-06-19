@@ -127,6 +127,12 @@ class ArvoreBinaria:
             return True
         else:
             return False
+
+def nivelFolha(no):
+    temp = no
+    while temp.getEsq() != None:
+        temp = temp.getEsq()
+    return temp.getNivel()
                 
 def pesquisa(arvore, chave_1, chave_2):
     no_1 = arvore.search(chave_1, arvore.getRaiz())
@@ -139,10 +145,10 @@ def pesquisa(arvore, chave_1, chave_2):
     elif no_1 == None and no_2 == None:
         print(arvore.getProfundidade())
     elif no_1 == None:
-        altura = arvore.getProfundidade() - no_2.getNivel()
+        altura = nivelFolha(no_2) - no_2.getNivel()
         print(altura)
     else:
-        altura = arvore.getProfundidade() - no_1.getNivel()
+        altura = nivelFolha(no_1) - no_1.getNivel()
         print(altura)
 
 def main():
@@ -155,6 +161,5 @@ def main():
         vetorDeEntrada = input().split()
         pesquisa(arvore, vetorDeEntrada[0], vetorDeEntrada[1])
         
-    
 if __name__ == "__main__":
     main()
