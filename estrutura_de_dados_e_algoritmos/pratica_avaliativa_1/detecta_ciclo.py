@@ -1,10 +1,8 @@
 class No:
-    # construtor
     def __init__(self, chave=None, prox=None):
         self.chave = chave
         self.prox = prox
     
-    # getters e setters
     def getChave(self):
         return self.chave
     
@@ -18,18 +16,15 @@ class No:
         self.prox = no
     
 class ListaEncadeadaSimples:
-    # construtor
     def __init__(self):
         self.head = None
     
-    # getter e setter
     def getHead(self):
         return self.head
 
     def setHead(self, no):
         self.head = no
 
-    # métodos
     def append(self, chave):
         no = No(chave)
         if self.getHead() == None:
@@ -40,7 +35,7 @@ class ListaEncadeadaSimples:
                 temp = temp.getProx()
             temp.setProx(no)
             
-    def detectsCycle(self):         # função para detectar se há algum ciclo na lista
+    def detectsCycle(self):
         temp1 = self.getHead()
         temp2 = temp1.getProx()
         while temp2 != None:
@@ -62,7 +57,7 @@ class ListaEncadeadaSimples:
 def main():
     lista = ListaEncadeadaSimples()
     qtdLinhas = int(input())
-    for i in range(qtdLinhas - 1):          # entrada e processamento de dados
+    for i in range(qtdLinhas - 1):
         if i == 0:
             chaves = input().split()
             for item in chaves:
@@ -71,7 +66,7 @@ def main():
         elemento = lista.search(no[0])
         proximo = lista.search(no[1])
         elemento.setProx(proximo)
-    print(lista.detectsCycle())             # saída
+    print(lista.detectsCycle())
             
 if __name__ == "__main__":
     main()
