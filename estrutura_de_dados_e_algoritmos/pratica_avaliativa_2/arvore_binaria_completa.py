@@ -127,60 +127,6 @@ class ArvoreBinaria:
             return True
         else:
             return False
-
-class Fila:
-    def __init__(self):
-        self.first = None
-        self.last = None
-    
-    def getFirst(self):
-        return self.first
-    
-    def setFirst(self, no):
-        self.first = no
-        
-    def getLast(self):
-        return self.last
-    
-    def setLast(self, no):
-        self.last = no
-    
-    def display(self):
-        if self.empty():
-            print("Erro -> Fila vazia!")
-        else:
-            temp = self.getFirst()
-            while True:
-                if temp == None:
-                    break
-                print(f"{temp.show()}")
-                temp = temp.getDir()
-        
-    def empty(self):
-        if self.getFirst() == None and self.getLast() == None:
-            return True
-        return False
-        
-    def put(self, chave):
-        valor = int(chave)
-        no = No(valor)
-        if self.empty():
-            self.setFirst(no)
-            self.setLast(no)
-        else:
-            temp = self.getLast()
-            temp.setDir(no)
-            self.setLast(no)
-    
-    def pop(self):
-        if self.empty():
-            print("Erro -> Fila vazia!")
-        else:
-            temp = self.getFirst()
-            self.setFirst(temp.getDir())
-            temp.setDir(None)
-            if self.getFirst() == None:
-                self.setLast(None)
                 
 def pesquisa(arvore, chave_1, chave_2):
     no_1 = arvore.search(chave_1, arvore.getRaiz())
