@@ -78,6 +78,11 @@ class ArvoreBinaria:
         self.setQtdElementos(self.getQtdElementos() + 1)
         no.setNivel(self.getProfundidade())
 
+    def clearTree(self):
+        self.setProfundidade = 0
+        self.setQtdElementos = 0
+        self.setRaiz(None)
+    
     def display(self, raiz):
         if raiz == None:
             return
@@ -122,25 +127,67 @@ class ArvoreBinaria:
             return True
         else:
             return False
-            
+
+class Fila:
+    def __init__(self):
+        self.first = None
+        self.last = None
+    
+    def getFirst(self):
+        return self.first
+    
+    def setFirst(self, no):
+        self.first = no
+        
+    def getLast(self):
+        return self.last
+    
+    def setLast(self, no):
+        self.last = no
+    
+    def display(self):
+        if self.empty():
+            print("Erro -> Fila vazia!")
+        else:
+            temp = self.getFirst()
+            while True:
+                if temp == None:
+                    break
+                print(f"{temp.show()}")
+                temp = temp.getDir()
+        
+    def empty(self):
+        if self.getFirst() == None and self.getLast() == None:
+            return True
+        return False
+        
+    def put(self, chave):
+        valor = int(chave)
+        no = No(valor)
+        if self.empty():
+            self.setFirst(no)
+            self.setLast(no)
+        else:
+            temp = self.getLast()
+            temp.setDir(no)
+            self.setLast(no)
+    
+    def pop(self):
+        if self.empty():
+            print("Erro -> Fila vazia!")
+        else:
+            temp = self.getFirst()
+            self.setFirst(temp.getDir())
+            temp.setDir(None)
+            if self.getFirst() == None:
+                self.setLast(None)
+                
 def main():
-    print("Iniciando teste\n")
     arvore = ArvoreBinaria.newTree()
-    arvore.add(1)
-    arvore.add(2)
-    arvore.add(3)
-    arvore.add(4)
-    arvore.add(5)
-    arvore.add(6)
-    arvore.add(7)
-    arvore.add(8)
-    arvore.add(9)
-    arvore.add(10)
-    arvore.display(arvore.getRaiz())
-    print(f"\nProfundidade: {arvore.getProfundidade()}.\n")
-    no1 = arvore.search(3, arvore.getRaiz())
-    no2 = arvore.search(10, arvore.getRaiz())
-    print(no1.getNivel() - no2.getNivel())
+    qtdLinhas = int(input())
+    vetorDeEntrada = input().split()
+    for elemento in vetorDeEntrada:
+        arvore.add(int(elemento))
     
     
 if __name__ == "__main__":
