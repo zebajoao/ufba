@@ -68,13 +68,13 @@ class ArvoreBinaria:
         self.setRaiz(None)
     
     def inOrder(self, chave, raiz):
-        if raiz == None or raiz.getChave() == chave:
+        if raiz == None:
             return
-        self.display(chave, raiz.getEsq())
+        self.inOrder(chave, raiz.getEsq())
         print(f"{raiz.show()}", end=' ')
         if raiz.getChave() == chave:
             return
-        self.display(chave, raiz.getDir())
+        self.inOrder(chave, raiz.getDir())
             
     def empty(self):
         if self.getRaiz() == None:
@@ -87,10 +87,23 @@ class ArvoreBinaria:
     def search(self, chave, raiz):
         if raiz == None:
             return
-        if raiz.getChave() == chave:
-            return raiz
         temp = self.search(chave, raiz.getEsq())
         if temp != None:
             return temp
+        elif raiz.getChave() == chave:
+            return raiz
         else:
             return self.search(chave, raiz.getDir())
+
+def main():
+    qtdLinhas = int(input())
+    arvore = ArvoreBinaria.newTree()
+    vetorDeEntrada = input().split()
+    for elemento in vetorDeEntrada:
+        arvore.add(int(elemento))
+    #inserir valores para remoção
+    valorParaPesquisa = int(input())
+    arvore.inOrder(valorParaPesquisa, arvore.getRaiz())
+        
+if __name__ == "__main__":
+    main()
