@@ -31,3 +31,66 @@ class No:
         
     def show(self):
         return f"{self.getChave()}"
+    
+class ArvoreBinaria:
+    def __init__(self):
+        self.raiz = None
+    
+    def getRaiz(self):
+        return self.raiz
+    
+    def setRaiz(self, no):
+        self.raiz = no
+    
+    def add(self, chave):
+        no = No(chave)
+        if self.empty():
+            self.setRaiz(no)
+        else:
+            temp = self.getRaiz()
+            while True:
+                if no.getChave() < temp.getChave():
+                    if temp.getEsq() == None:
+                        no.setPai(temp)
+                        temp.setEsq(no)
+                        break
+                    temp = temp.getEsq()
+                    continue
+                else:
+                    if temp.getDir() == None:
+                        no.setPai(temp)
+                        temp.setDir(no)
+                        break
+                    temp = temp.getDir()
+                    continue
+
+    def clearTree(self):
+        self.setRaiz(None)
+    
+    def inOrder(self, chave, raiz):
+        if raiz == None or raiz.getChave() == chave:
+            return
+        self.display(chave, raiz.getEsq())
+        print(f"{raiz.show()}", end=' ')
+        if raiz.getChave() == chave:
+            return
+        self.display(chave, raiz.getDir())
+            
+    def empty(self):
+        if self.getRaiz() == None:
+            return True
+        return False
+    
+    def newTree():    
+        return ArvoreBinaria()
+    
+    def search(self, chave, raiz):
+        if raiz == None:
+            return
+        if raiz.getChave() == chave:
+            return raiz
+        temp = self.search(chave, raiz.getEsq())
+        if temp != None:
+            return temp
+        else:
+            return self.search(chave, raiz.getDir())
