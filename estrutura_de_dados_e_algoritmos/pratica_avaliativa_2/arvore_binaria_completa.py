@@ -182,13 +182,33 @@ class Fila:
             if self.getFirst() == None:
                 self.setLast(None)
                 
+def pesquisa(arvore, chave_1, chave_2):
+    no_1 = arvore.search(chave_1, arvore.getRaiz())
+    no_2 = arvore.search(chave_2, arvore.getRaiz())
+    if no_1 != None and no_2 != None:
+        diferença = no_1.getNivel() - no_2.getNivel()
+        if diferença < 0:
+            diferença *= -1
+        print(diferença)
+    elif no_1 == None and no_2 == None:
+        print(arvore.getProfundidade())
+    elif no_1 == None:
+        altura = arvore.getProfundidade() - no_2.getNivel()
+        print(altura)
+    else:
+        altura = arvore.getProfundidade() - no_1.getNivel()
+        print(altura)
+
 def main():
     arvore = ArvoreBinaria.newTree()
     qtdLinhas = int(input())
     vetorDeEntrada = input().split()
     for elemento in vetorDeEntrada:
-        arvore.add(int(elemento))
-    
+        arvore.add(elemento)
+    for i in range(qtdLinhas - 1):
+        vetorDeEntrada = input().split()
+        pesquisa(arvore, vetorDeEntrada[0], vetorDeEntrada[1])
+        
     
 if __name__ == "__main__":
     main()
