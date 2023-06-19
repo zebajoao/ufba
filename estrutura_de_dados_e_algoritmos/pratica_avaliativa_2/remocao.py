@@ -29,6 +29,12 @@ class No:
     def setDir(self, no):
         self.dir = no
         
+    def resetChild(self, no, ponteiro):
+        if no.getChave() < self.getChave():
+            self.setEsq(ponteiro)
+        else:
+            self.setDir(ponteiro)
+        
     def show(self):
         return f"{self.getChave()}"
     
@@ -66,24 +72,62 @@ class ArvoreBinaria:
 
     def clearTree(self):
         self.setRaiz(None)
-    
-    def inOrder(self, chave, raiz):
-        if raiz == None:
-            return
-        self.inOrder(chave, raiz.getEsq())
-        print(f"{raiz.show()}", end=' ')
-        if raiz.getChave() == chave:
-            return
-        self.inOrder(chave, raiz.getDir())
             
     def empty(self):
         if self.getRaiz() == None:
             return True
         return False
     
+    def inOrder(self, chave, raiz):
+        if raiz == None:
+            return
+        self.inOrder(chave, raiz.getEsq())
+        if raiz.getChave() > chave:
+            return
+        print(f"{raiz.show()}", end=' ')
+        self.inOrder(chave, raiz.getDir())
+    
     def newTree():    
         return ArvoreBinaria()
     
+    def remove(self, chave):
+        no = self.search(chave, self.getRaiz())
+        if no != None:
+            pai = no.getPai()
+            if (no.getEsq() == None) and (no.getDir() == None):
+                pai.resetChild(no, None)
+            elif (no.getEsq() == None):
+                temp = no.getDir()
+                pai.resetChild(no, temp)
+                temp.setPai(pai)
+            elif (no.getDir() == None):
+                temp = no.getEsq()
+                pai.resetChild(no, temp)
+                temp.setPai(pai)
+            else:
+                temp = no.getEsq()
+                while temp.getDir() != None:
+                    temp = temp.getDir()
+                paiTemp = temp.getPai()
+                if paiTemp == no:
+                    temp.setDir(no.getDir())
+                    no.getDir().setPai(temp)
+                else:    
+                    paiTemp.resetChild(temp, temp.getEsq())
+                    temp.getEsq().setPai(paiTemp)
+                    temp.setEsq(no.getEsq())
+                    no.getEsq().setPai(temp)
+                    temp.setDir(no.getDir())
+                    no.getDir().setPai(temp)
+                if pai == None:
+                    self.setRaiz(temp)
+                else:
+                    pai.resetChild(no, temp)
+                temp.setPai(pai)
+            no.setPai(None)
+            no.setEsq(None)
+            no.setDir(None)
+            
     def search(self, chave, raiz):
         if raiz == None:
             return
@@ -101,8 +145,12 @@ def main():
     vetorDeEntrada = input().split()
     for elemento in vetorDeEntrada:
         arvore.add(int(elemento))
-    #inserir valores para remoção
+    remocoes = input().split()
     valorParaPesquisa = int(input())
+    arvore.inOrder(valorParaPesquisa, arvore.getRaiz())
+    for elemento in remocoes:
+        arvore.remove(int(elemento))
+    print()
     arvore.inOrder(valorParaPesquisa, arvore.getRaiz())
         
 if __name__ == "__main__":
