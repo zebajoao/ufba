@@ -37,8 +37,13 @@ class No:
         self.dir = no
     
     def resetChildren(self):
-        self.setDir(None)
-        self.setEsq(None)
+        if self.getDir() == self:
+            self.setDir(None)
+        if self.getEsq() == self:
+            self.setEsq(None)
+        temp = self.getDir()
+        self.setDir(self.getEsq())
+        self.setEsq(temp)
         
     def setPointers(self, temp, no):
         if self.getDir() == temp:
@@ -109,15 +114,15 @@ class Heap:
                     temp2 = No(no.getChave())
                     temp2.setDir(no.getDir())
                     temp2.setEsq(no.getEsq())
-                    self.setChildren(temp, no)
+                    self.relations(temp, no)
                     temp.setDir(temp2.getDir())
                     temp.setEsq(temp2.getEsq())
-                    self.setRoot(temp, no)
+                    self.root(temp, no)
                     self.setRaiz(no)
                 else:
                     temp2.setPointers(temp, no)
-                    self.setChildren(temp, no)
-                    self.setRoot(temp, no)
+                    self.relations(temp, no)
+                    self.root(temp, no)
                     temp.resetChildren()
                 temp2 = no.getNivel()
                 no.setNivel(temp.getNivel())
@@ -132,6 +137,27 @@ class Heap:
     
     def newHeap():    
         return Heap()
+    
+    def relations(self, temp, no):
+        if temp.getDir() == no:
+            temp.setDir(no.getEsq())
+            no.setDir(temp)
+            no.setEsq(temp.getEsq())
+            temp.setEsq(no.getDir())
+        else:
+            temp.setEsq(no.getDir())
+            no.setEsq(temp)
+            no.setDir(temp.getDir())
+            temp.setDir(no.getEsq())
+        temp.setPai(no)
+    
+    def root(self, temp, no):
+        if no.getDir() == temp:
+            temp2 = no.getEsq()
+        else:
+            temp2 = no.getDir()
+        if temp2 != None:
+            temp2.setPai(no)
     
     def search(self, chave, raiz):
         if raiz == None:
@@ -156,23 +182,6 @@ class Heap:
                 return temp
             else:
                 return self.selectRoot(raiz.getDir())
-    
-    def setRoot(self, temp, no):
-        if no.getDir() == temp:
-            temp2 = no.getEsq()
-        else:
-            temp2 = no.getDir()
-        if temp2 != None:
-            temp2.setPai(no)
-
-    def setChildren(self, temp, no):
-        if temp.getDir() == no:
-            no.setDir(temp)
-            no.setEsq(temp.getEsq())
-        else:
-            no.setEsq(temp)
-            no.setDir(temp.getDir())
-        temp.setPai(no)
     
     def verifyLevel(self, raiz):
         if self.getQtdElementos() >= ((2**(raiz.getNivel() + 1)) - 1):
