@@ -38,6 +38,10 @@ class Vetor:
     def getTamanho(self):
         return self.tamanho
     
+    def setTamanho(self, valor):
+        self.tamanho = valor
+        return
+    
     def getQtdElementos(self):
         return self.qtdElementos
     
@@ -72,6 +76,17 @@ class Vetor:
         self.setFim(no)
         self.setQtdElementos(self.getQtdElementos() + 1)
         return
+    
+    def concatenate(self, vetor):
+        temp = self.getFim()
+        temp.setProx(vetor.getInicio())
+        temp = vetor.getInicio()
+        temp.setAntr(self.getFim())
+        self.setFim(vetor.getFim())
+        temp = vetor.getQtdElementos()
+        self.setQtdElementos(self.getQtdElementos() + temp)
+        temp = vetor.getTamanho()
+        self.setTamanho(self.getTamanho() + temp)
     
     def display(self):
         if self.empty():
@@ -139,6 +154,10 @@ class Vetor:
         no2.setChave(temp)
         return
 
+def quickSort(vetor, pivot):
+    menores = Vetor(vetor.getTamanho())
+    maiores = Vetor(vetor.getTamanho())
+
 def main():
     qtdLinhas = int(input())
     pivot = int(input())
@@ -146,7 +165,8 @@ def main():
     for i in range(qtdLinhas - 1):
         chave = int(input())
         vetor.append(chave)
-    vetor.display()        
+    quickSort(vetor, pivot)
+    vetor.display()
     
 if __name__ == "__main__":
     main()
