@@ -139,6 +139,26 @@ class Vetor:
         no2.setChave(temp)
         return
 
+def insertionSort(vetor, limite):
+    vetorAuxiliar = Vetor(vetor.getTamanho())
+    temp = vetor.getInicio()
+    contador = 0
+    while temp != None and contador < limite:
+        vetorAuxiliar.append(temp.getChave())
+        temp2 = vetorAuxiliar.getFim()
+        while True:
+            if temp2.getAntr() == None:
+                break
+            elif temp2.getChave() >= temp2.getAntr().getChave():
+                break
+            else:
+                vetorAuxiliar.switchKeys(temp2, temp2.getAntr())
+                temp2 = temp2.getAntr()
+                continue
+        temp = temp.getProx()
+        contador += 1
+    return vetorAuxiliar
+
 def main():
     qtdLinhas = int(input())
     vetor = Vetor(qtdLinhas - 1)
@@ -146,7 +166,7 @@ def main():
     for i in range(qtdLinhas - 1):
         chave = int(input())
         vetor.append(chave)
-    #insertionSort(vetor, maxIteracoes)
+    vetor = insertionSort(vetor, maxIteracoes)
     vetor.display()
     
 if __name__ == "__main__":
