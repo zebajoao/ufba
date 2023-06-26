@@ -140,7 +140,14 @@ class Vetor:
         return
 
 def bubbleSort(vetor, limite):
-    temp = vetor.getInicio()
+    temp = vetor.getFim()
+    for i in range(limite):
+        temp2 = vetor.getInicio()
+        while temp2 != temp:
+            if temp2.getChave() > temp2.getProx().getChave():
+                vetor.switchKeys(temp2, temp2.getProx())
+            temp2 = temp2.getProx()
+        temp = temp.getAntr()
 
 def main():
     qtdLinhas = int(input())
