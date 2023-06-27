@@ -28,26 +28,10 @@ class No:
     def show(self):
         return f"{self.getChave()}"
     
-class Vetor:
-    def __init__(self, tam):
-        self.tamanho = tam
-        self.qtdElementos = 0
+class Lista:
+    def __init__(self):
         self.inicio = None
         self.fim = None
-    
-    def getTamanho(self):
-        return self.tamanho
-    
-    def setTamanho(self, valor):
-        self.tamanho = valor
-        return
-    
-    def getQtdElementos(self):
-        return self.qtdElementos
-    
-    def setQtdElementos(self, valor):
-        self.qtdElementos = valor
-        return
     
     def getInicio(self):
         return self.inicio
@@ -67,30 +51,30 @@ class Vetor:
         no = No(chave)
         if self.empty():
             self.setInicio(no)
-        elif self.full():
-            return "Erro -> vetor cheio!"
         else:
             temp = self.getFim()
             temp.setProx(no)
             no.setAntr(temp)
         self.setFim(no)
-        self.setQtdElementos(self.getQtdElementos() + 1)
         return
     
     def concatenate(self, vetor):
+        if vetor.empty():
+            return
+        if self.empty():
+            self.setInicio(vetor.getInicio())
+            self.setFim(vetor.getFim())
+            return
         temp = self.getFim()
         temp.setProx(vetor.getInicio())
         temp = vetor.getInicio()
         temp.setAntr(self.getFim())
         self.setFim(vetor.getFim())
-        temp = vetor.getQtdElementos()
-        self.setQtdElementos(self.getQtdElementos() + temp)
-        temp = vetor.getTamanho()
-        self.setTamanho(self.getTamanho() + temp)
+        return
     
     def display(self):
         if self.empty():
-            return "Erro -> vetor vazio!"
+            return "Erro -> lista vazia!"
         else:
             temp = self.getInicio()
             while temp != self.getFim():
@@ -104,14 +88,9 @@ class Vetor:
             return True
         return False
     
-    def full(self):
-        if self.getQtdElementos() == self.getTamanho():
-            return True
-        return False
-    
     def remove(self, chave):
         if self.empty():
-            return "Erro -> vetor vazio!"
+            return "Erro -> lista vazia!"
         no = self.search(chave)
         if no == None:
             return "Erro -> elemento não encontrado!"
@@ -127,14 +106,6 @@ class Vetor:
                 temp = temp.getProx()
             temp.setProx(no.getProx())
         no.setProx(None)
-        self.setQtdElementos(self.getQtdElementos() - 1)
-        return
-    
-    def resetInicio(self):
-        temp = self.getFim()
-        while temp.getAntr() != None:
-            temp = temp.getAntr()
-        self.setInicio(temp)
         return
         
     def search(self, chave):
@@ -147,26 +118,51 @@ class Vetor:
                 return temp
             else:
                 temp = temp.getProx()
-                
-    def switchKeys(self, no1, no2):
-        temp = no1.getChave()
-        no1.setChave(no2.getChave())
-        no2.setChave(temp)
-        return
 
-def quickSort(vetor, pivot):
-    menores = Vetor(vetor.getTamanho())
-    maiores = Vetor(vetor.getTamanho())
+def quickSort(lista, pivot, i=0):
+    menores = Lista()
+    maiores = Lista()
+    temp = lista.getInicio()
+    while temp != None:
+        if temp.getChave() < pivot:
+            menores.append(temp.getChave())
+        if temp.getChave() > pivot:
+            maiores.append(temp.getChave())
+        temp = temp.getProx()
+    iteracao = i
+    if iteracao == 0:
+        if menores.empty() and maiores.empty():
+            return pivot
+        elif menores.empty():
+            temp = pivot
+            temp2 = maiores.getInicio().getChave()
+        elif maiores.empty():
+            temp = menores.getInicio().getChave()
+            temp2 = pivot
+        else:
+            temp = menores.getInicio().getChave()
+            temp2 = maiores.getInicio().getChave()
+        print(temp, temp2, end=' ')
+    iteracao += 1
+    if not menores.empty():
+        menores = quickSort(menores, menores.getInicio().getChave(), iteracao)
+    if not maiores.empty():
+        maiores = quickSort(maiores, maiores.getInicio().getChave(), iteracao)
+    listaAuxiliar = menores
+    listaAuxiliar.append(pivot)
+    listaAuxiliar.concatenate(maiores)
+    return listaAuxiliar
+    
 
 def main():
     qtdLinhas = int(input())
     pivot = int(input())
-    vetor = Vetor(qtdLinhas - 1)
+    lista = Lista()
     for i in range(qtdLinhas - 1):
         chave = int(input())
-        vetor.append(chave)
-    quickSort(vetor, pivot)
-    vetor.display()
+        lista.append(chave)
+    lista = quickSort(lista, pivot)
+    lista.display()
     
 if __name__ == "__main__":
     main()
