@@ -78,6 +78,14 @@ class ListaEncadeada:
             return True
         return False
     
+    def find(self, chave):
+        temp = self.getInicio()
+        while temp.getChave() != chave:
+            temp = temp.getProx()
+        if temp == None:
+            return -1
+        return temp.getIndice()
+        
     def newList():
         return ListaEncadeada()
 
@@ -87,6 +95,7 @@ class Hash:
         self.inicio = None
         self.fim = None
         self.qtdRegistros = 0
+        self.alfabeto = Hash.newAlphabet()
         
     def getTamanho(self):
         return self.tamanho
@@ -116,6 +125,9 @@ class Hash:
         self.qtdRegistros = valor
         return
     
+    def getAlfabeto(self):
+        return self.alfabeto
+    
     def add(self, chave):
         indice = self.hashing(chave)
         temp = self.getInicio()
@@ -126,7 +138,7 @@ class Hash:
     
     def display(self, indice=None):
         if indice != None:
-            no = self.find(indice)
+            no = self.search(indice)
             lista = no.getChave()
             lista.display()
             return
@@ -142,17 +154,18 @@ class Hash:
             return True
         return False
     
-    def find(self, indice):
-        temp = self.getInicio()
-        while temp.getIndice() != indice:
-            temp = temp.getProx()
-        return temp
-    
     def hashing(self, chave):
         k = 0
         for item in chave:
-            k += (ord(item) - 96)
+            k += self.getAlfabeto().find(item) + 1
         return k % self.getTamanho()
+    
+    def newAlphabet():
+        letras = 'abcdefghijklmnopqrstuvwxyz'
+        alfabeto = ListaEncadeada.newList()
+        for letra in letras:
+            alfabeto.append(letra)
+        return alfabeto
     
     def newHash(tamanho):
         hash = Hash(tamanho)
@@ -169,6 +182,12 @@ class Hash:
             hash.setFim(no)    
             hash.setQtdRegistros(hash.getQtdRegistros() + 1)
         return hash
+    
+    def search(self, indice):
+        temp = self.getInicio()
+        while temp.getIndice() != indice:
+            temp = temp.getProx()
+        return temp
 
 def main():
     qtdLinhas = int(input())
@@ -176,7 +195,7 @@ def main():
     indice = int(input())
     tabelaHash = Hash.newHash(tamanho)
     for i in range(qtdLinhas - 2):
-        palavra = input()
+        palavra = input().strip()
         tabelaHash.add(palavra)
     tabelaHash.display(indice)
 
