@@ -66,13 +66,13 @@ class ListaEncadeada:
         self.tamanho = tamanho
         return
     
-    def display(self, indice):
+    def display(self):
         if self.empty():
             return "Erro -> Registro vazio!"
         else:
             temp = self.getInicio()
             while True:
-                if temp == None or temp.getIndice() > indice:
+                if temp == None:
                     break
                 print(temp.show(), end=' ')
                 temp = temp.getProx()
@@ -301,10 +301,11 @@ class ArvoreB:
         filhos = paginaB.getFilhos()
         temp = chaves.getInicio()
         temp2 = filhos.getInicio()
-        for i in range((chaves.getQtdElementos())//2):
+        for i in range((chaves.getQtdElementos() - 1)//2):
             menores.add(temp.getChave(), tipo="chave")
             if temp2 != None:
                 menores.add(temp2.getChave(), tipo="filho")
+                temp2.getChave().setPai(menores)
                 temp2 = temp2.getProx()
                 filhos.remove(filhos.getInicio().getChave())
             temp = temp.getProx()
@@ -313,6 +314,7 @@ class ArvoreB:
         if temp2 != None:
             filhos.remove(temp2.getChave())
             menores.add(temp2.getChave(), tipo="filho")
+            temp2.getChave().setPai(menores)
         pai.add(temp.getChave(), tipo="chave")
         indice = pai.findPointer(temp.getChave())
         pai.add(menores, tipo="filho", indice=(indice-1))
@@ -323,7 +325,7 @@ class ArvoreB:
     def displaySearch(self, pagina, chave):
         indice = pagina.findPointer(chave)
         lista = pagina.getChaves()
-        lista.display(indice)
+        lista.display()
         if pagina.getFilhos().empty():
             return
         temp = pagina.getFilhos().getInicio()
