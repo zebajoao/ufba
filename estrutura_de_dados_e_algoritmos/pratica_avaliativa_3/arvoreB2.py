@@ -199,7 +199,9 @@ class ListaEncadeada:
                 aux.setProx(None)
                 self.fixIndex(temp)
             self.setQtdElementos(self.getQtdElementos() - 1)
-            return
+        if self.empty():
+            self.setFim(None)
+        return
         
     def search(self, chave):
         temp = self.getInicio()
@@ -246,6 +248,22 @@ class PaginaB:
         else:
             lista = self.getChaves()
             lista.insert(elemento)
+        return
+    
+    def concatenate(self, pagina):
+        temp = pagina.getChaves().getInicio()
+        aux = pagina.getFilhos().getInicio()
+        while True:
+            if temp == None and aux == None:
+                break
+            if temp != None:
+                self.add(temp.getChave(), tipo="chave")
+                temp = temp.getProx()
+            if aux != None:
+                self.add(aux.getChave(), tipo="filho")
+                aux.getChave().setPai(self)
+                aux = aux.getProx()
+        return
         
     def full(self):
         if self.getChaves().full():
@@ -265,7 +283,7 @@ class PaginaB:
     def remove(self, folha, chave):
         if self != folha:   
             no = self.getChaves().search(chave)
-            temp = folha.getChaves().getInicio()
+            temp = folha.getChaves().getFim()
             no.switchKeys(temp)
         folha.getChaves().remove(chave)
         return
@@ -292,31 +310,48 @@ class ArvoreB:
     def concatenate(self, pagina):
         pai = pagina.getPai()
         indice = pai.getFilhos().find(pagina)
-        temp = pai.getFilhos.getInicio()
-        while True:
-            if temp.getProx() == None or temp.getIndice() > indice:
-                break
+        temp = pai.getFilhos().getInicio()
+        chavePai = pai.getChaves().getInicio()
+        if indice == 0:
             temp = temp.getProx()
-            
-            
+        else:
+            while temp.getProx().getIndice() < indice:
+                if chavePai.getProx() != None:
+                    chavePai = chavePai.getProx()
+                temp = temp.getProx()
+        chavePai = chavePai.getChave()
+        temp = temp.getChave()
+        pagina.add(chavePai, tipo="chave")
+        pai.getChaves().remove(chavePai)
+        pagina.concatenate(temp)
+        pai.getFilhos().remove(temp)
         if pagina.getChaves().full():
                 self.split(pagina)
-        elif pai.getChaves().getQtdElementos() < self.getOrdem()//2:
+        elif pai == self.getRaiz() and pai.getFilhos().getQtdElementos() == 1:
+            self.setRaiz(pagina)
+            pagina.setPai(None)
+        elif pai != self.getRaiz() and pai.getChaves().getQtdElementos() < self.getOrdem()//2:
             self.concatenate(pai)
         else:
             return
-                
-        
     
-    def search(self, pagina, chave):
-        indice = pagina.findPointer(chave)
-        lista = pagina.getChaves()
-        if lista.find(chave) != -1:
-            return pagina
+    def displayPreOrder(self, pagina):
+        pagina.getChaves().display()
+        if pagina.getFilhos().empty():
+            return
         temp = pagina.getFilhos().getInicio()
-        for i in range(indice):
+        while temp != None:
+            self.displayPreOrder(temp.getChave())
             temp = temp.getProx()
-        return self.search(temp.getChave(), chave)
+    
+    def findBiggestSmallerLeaf(self, pagina, chave):
+        if pagina.getFilhos().empty():
+            return pagina
+        indice = pagina.findPointer(chave)
+        temp = pagina.getFilhos().getInicio()
+        for i in range(indice - 1):
+            temp = temp.getProx()
+        return self.selectPage(temp.getChave(), chave)
     
     def newBTree(ordem):
         arvore = ArvoreB(ordem)
@@ -333,11 +368,23 @@ class ArvoreB:
     
     def remove(self, chave):
         pagina = self.search(self.getRaiz(), chave)
-        folha = self.selectPage(pagina, chave)
+        folha = self.findBiggestSmallerLeaf(pagina, chave)
         pagina.remove(folha, chave)
         if folha.getChaves().getQtdElementos() < self.getOrdem()//2:
             self.concatenate(folha)
         return
+    
+    def search(self, pagina, chave):
+        lista = pagina.getChaves()
+        if lista.find(chave) != -1:
+            return pagina
+        indice = pagina.findPointer(chave)
+        temp = pagina.getFilhos().getInicio()
+        for i in range(indice):
+            if temp.getProx() == None:
+                break
+            temp = temp.getProx()
+        return self.search(temp.getChave(), chave)
         
     def selectPage(self, paginaB, chave):
         if paginaB.getFilhos().empty():
@@ -383,18 +430,19 @@ class ArvoreB:
         if pai.full():
             self.split(pai)
 
-    
-        
-
 def main():
     qtdLinhas = int(input())
     ordem = int(input())
-    chaveDeConsulta = int(input())
     arvoreBusca = ArvoreB.newBTree(ordem)
-    for i in range(qtdLinhas - 2):
-        chave = int(input())
-        arvoreBusca.put(chave)
-    arvoreBusca.remove(5)
-    
+    for i in range(qtdLinhas - 1):
+        entrada = input().split()
+        operacao = int(entrada[0])
+        chave = int(entrada[1])
+        if operacao == 0:
+            arvoreBusca.remove(chave)
+        else:
+            arvoreBusca.put(chave)
+    arvoreBusca.displayPreOrder(arvoreBusca.getRaiz())
+
 if __name__ == "__main__":
     main()
